@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.kirito.wechatrecordbutton.MainActivity">
+
+    <ListView
+        android:id="@+id/lv"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:divider="@null"
+        android:layout_height="0dp"/>
+
+    <View
+        android:background="#6e6060"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"/>
+
+    <com.example.kirito.wechatrecordbutton.support.AudioButton
+        android:id="@+id/btn"
+        android:layout_marginTop="5dp"
+        android:text="@string/btn_state_normal"
+        android:textSize="18sp"
+        android:background="@drawable/btn_state_normal_bcg"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+</LinearLayout>

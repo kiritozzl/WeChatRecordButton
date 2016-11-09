@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">WechatRecordButton</string>
+
+    <string name="btn_state_normal">按下 录音</string>
+    <string name="btn_state_recordinng">松手 发送</string>
+
+    <string name="dialog_recording">手指上滑 取消发送</string>
+    <string name="dialog_cancel">手指松开 取消发送</string>
+    <string name="dialog_too_short">录音时间过短!</string>
+</resources>
