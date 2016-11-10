@@ -91,14 +91,17 @@ public class AudioManager {
 
     public void releaseAudio(){
         if (mMediaRecorder!= null){
-            mMediaRecorder.stop();
-            mMediaRecorder.release();
-            mMediaRecorder = null;
+            try{
+                mMediaRecorder.stop();
+                mMediaRecorder.release();
+                mMediaRecorder = null;
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
 
     public void cancelAudio(){
-        Log.e(TAG, "cancelAudio: ---" );
         releaseAudio();
         if (current_path != null){
             File dele_file = new File(current_path);

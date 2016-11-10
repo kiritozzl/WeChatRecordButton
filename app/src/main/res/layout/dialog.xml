@@ -12,11 +12,13 @@
 
         <ImageView
             android:id="@+id/iv_icon"
+            android:src="@drawable/recorder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
         <ImageView
             android:id="@+id/iv_voice"
+            android:src="@drawable/v1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </LinearLayout>
@@ -25,6 +27,7 @@
         android:id="@+id/tv_label"
         android:textColor="#fff"
         android:textSize="16sp"
+        android:text="@string/dialog_recording"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 </LinearLayout>

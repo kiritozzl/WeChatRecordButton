@@ -28,6 +28,21 @@ public class AudioButton extends Button implements AudioManager.audioPrepareList
     //mTime 必须是float型，不能是int型
     private float mTime;
 
+    private int cur_state = BTN_STATE_NORMAL;
+
+    private DialogManager mDialogManager;
+    //标志audio recorder是否prepare完毕
+    private boolean isRecording;
+    private static final int MIN_CABCEL_Y = 100;
+
+    private AudioManager am;
+    //是否触发了onLongClick
+    private boolean isLongClick;
+
+    private boolean isVoiceConflict;
+
+    private onFinishListener mListener;
+
     private Handler handler = new Handler();
     private Handler mHandler = new Handler(){
         @Override
@@ -40,7 +55,6 @@ public class AudioButton extends Button implements AudioManager.audioPrepareList
                     handler.post(timeRunnable);
                     break;
                 case AUDIO_CANCEL:
-                    isTooShort = false;
                     mDialogManager.dismissDialog();
                     break;
                 case AUDIO_VOICE_CHANGE:
@@ -53,7 +67,7 @@ public class AudioButton extends Button implements AudioManager.audioPrepareList
     private Runnable timeRunnable = new Runnable() {
         @Override
         public void run() {
-            if (isRecording){
+            if (isRecording && !isVoiceConflict){
                 mTime += 0.1;
                 mHandler.sendEmptyMessage(AUDIO_VOICE_CHANGE);
                 handler.postDelayed(timeRunnable,100);
@@ -61,20 +75,6 @@ public class AudioButton extends Button implements AudioManager.audioPrepareList
         }
     };
 
-    private int cur_state;
-
-    private DialogManager mDialogManager;
-    //标志audio recorder是否prepare完毕
-    private boolean isRecording;
-    private static final int MIN_CABCEL_Y = 100;
-
-    private AudioManager am;
-    //是否触发了onLongClick
-    private boolean isLongClick;
-    //是否触发tooShort
-    private boolean isTooShort;
-
-    private onFinishListener mListener;
     //录音完成的回调
     public interface onFinishListener{
         void finishRecord(String path, float time);
@@ -119,12 +119,11 @@ public class AudioButton extends Button implements AudioManager.audioPrepareList
             case MotionEvent.ACTION_UP:
                 if (!isLongClick){
                     reset();
+                    mDialogManager.dismissDialog();
                     return super.onTouchEvent(event);
                 }else if(!isRecording || mTime < 0.6){
-                    //设置isRecording 为false防止setVoiceLevel方法更改图标，造成图标显示混乱！
-                    isRecording = false;
-                    //通过设置isTooShort防止reset方法，阻碍tooShort图标显示！
-                    isTooShort = true;
+                    //设置isVoiceConflict 为true防止setVoiceLevel方法更改图标，造成图标显示混乱！
+                    isVoiceConflict = true;
                     mDialogManager.tooShort();
                     am.cancelAudio();
                     //延时让tooShort的图标显示出来
@@ -137,17 +136,19 @@ public class AudioButton extends Button implements AudioManager.audioPrepareList
                     }
                 }else if (cur_state == BTN_STATE_WANTTOCANCEL){
                     am.cancelAudio();
+                    mDialogManager.dismissDialog();
                 }
                 reset();
                 break;
             case MotionEvent.ACTION_MOVE:
-                if(wantToCancel(x,y)){
-                    isRecording = false;
-                    changeButtonState(BTN_STATE_WANTTOCANCEL);
-                }else if(!wantToCancel(x,y)){
-                    isRecording = true;
-                    changeButtonState(BTN_STATE_RECORDING);
-                }
+                    if (isRecording){
+                        if(wantToCancel(x,y)){
+                            isVoiceConflict = true;
+                            changeButtonState(BTN_STATE_WANTTOCANCEL);
+                        }else if(!wantToCancel(x,y)){
+                            changeButtonState(BTN_STATE_RECORDING);
+                        }
+                    }
                 break;
         }
         return super.onTouchEvent(event);
@@ -166,19 +167,18 @@ public class AudioButton extends Button implements AudioManager.audioPrepareList
     public void reset(){
         isLongClick = false;
         isRecording = false;
+        isVoiceConflict = false;
         mTime = 0;
-        setText(getResources().getString(R.string.btn_state_normal));
-        setBackgroundResource(R.drawable.btn_state_normal_bcg);
-        if (!isTooShort){
-            mDialogManager.dismissDialog();
-        }
+        changeButtonState(BTN_STATE_NORMAL);
     }
 
     public void changeButtonState(int ste){
         if (cur_state != ste){
+            cur_state = ste;
             switch (ste){
                 case BTN_STATE_NORMAL:
-                    reset();
+                    setText(getResources().getString(R.string.btn_state_normal));
+                    setBackgroundResource(R.drawable.btn_state_normal_bcg);
                     break;
                 case BTN_STATE_RECORDING:
                     setText(getResources().getString(R.string.btn_state_recordinng));
@@ -191,7 +191,6 @@ public class AudioButton extends Button implements AudioManager.audioPrepareList
                     setText(getResources().getString(R.string.btn_state_recordinng));
                     setBackgroundResource(R.drawable.btn_state_recording_bcg);
                     mDialogManager.wantToCancel();
-                    am.releaseAudio();
                     break;
             }
         }

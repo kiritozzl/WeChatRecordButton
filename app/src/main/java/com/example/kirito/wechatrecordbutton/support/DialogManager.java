@@ -29,7 +29,6 @@ public class DialogManager {
     }
 
     public void showDialog(){
-        Log.e(TAG, "showDialog: ---" );
         mDialog = new Dialog(mContext, R.style.Dialog_Theme);
         View view = mLayoutInflater.inflate(R.layout.dialog,null,false);
         mDialog.setContentView(view);
@@ -38,17 +37,10 @@ public class DialogManager {
         iv_voice = (ImageView) mDialog.findViewById(R.id.iv_voice);
         tv_label = (TextView) mDialog.findViewById(R.id.tv_label);
 
-        iv_icon.setVisibility(View.VISIBLE);
-        iv_voice.setVisibility(View.VISIBLE);
-        iv_icon.setImageResource(R.drawable.recorder);
-        iv_voice.setImageResource(R.drawable.v1);
-
-        tv_label.setText(R.string.dialog_recording);
         mDialog.show();
     }
 
     public void showRecording(){
-        Log.e(TAG, "showRecording: ---" );
         if (mDialog != null && mDialog.isShowing()){
             iv_icon.setVisibility(View.VISIBLE);
             iv_voice.setVisibility(View.VISIBLE);
@@ -60,7 +52,6 @@ public class DialogManager {
     }
 
     public void wantToCancel(){
-        Log.e(TAG, "wantToCancel: ---" );
         if (mDialog != null && mDialog.isShowing()){
             iv_icon.setVisibility(View.VISIBLE);
             iv_voice.setVisibility(View.GONE);
@@ -71,9 +62,7 @@ public class DialogManager {
     }
 
     public void tooShort(){
-
         if (mDialog != null && mDialog.isShowing()){
-            Log.e(TAG, "tooShort: ---" );
             iv_icon.setVisibility(View.VISIBLE);
             iv_voice.setVisibility(View.GONE);
             iv_icon.setImageResource(R.drawable.voice_to_short);
@@ -90,7 +79,6 @@ public class DialogManager {
     }
 
     public void setVoiceLevel(int level){
-        Log.e(TAG, "setVoiceLevel: ---" );
         if (mDialog != null && mDialog.isShowing()){
             iv_icon.setVisibility(View.VISIBLE);
             iv_voice.setVisibility(View.VISIBLE);

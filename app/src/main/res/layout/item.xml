@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:layout_marginRight="4dp">
+
+    <RelativeLayout
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_thumb"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"/>
+
+        <FrameLayout
+            android:id="@+id/fl"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="4dp"
+            android:background="@drawable/chatto_bg_focused"
+            android:layout_toLeftOf="@id/iv_thumb"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:layout_height="wrap_content">
+            <!--android:background="@drawable/adj" 使用background而不是src-->
+            <View
+                android:id="@+id/v_anime"
+                android:background="@drawable/adj"
+                android:layout_gravity="center_vertical|right"
+                android:layout_width="25dp"
+                android:layout_height="25dp"/>
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_centerVertical="true"
+            android:gravity="center_vertical"
+            android:layout_toLeftOf="@id/fl"
+            android:textSize="18sp"
+            android:text="2"
+            android:textColor="#978c8c"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+
+</RelativeLayout>
