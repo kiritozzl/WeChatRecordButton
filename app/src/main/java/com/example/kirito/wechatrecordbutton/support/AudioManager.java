@@ -3,6 +3,7 @@ package com.example.kirito.wechatrecordbutton.support;
 import android.content.Context;
 import android.media.AudioFormat;
 import android.media.MediaRecorder;
+import android.util.Log;
 
 import java.io.File;
 import java.util.UUID;
@@ -19,6 +20,12 @@ public class AudioManager {
     private String current_path;
     private audioPrepareListener mListener;
     private boolean isPrepared;
+
+    private static final String TAG = "AudioManager";
+
+    public String getFilePath() {
+        return current_path;
+    }
 
     //添加AudioManager prepared完毕之后的回调接口
     public interface audioPrepareListener{
@@ -63,6 +70,9 @@ public class AudioManager {
             mMediaRecorder.prepare();
             mMediaRecorder.start();
             isPrepared = true;
+            if (mListener != null){
+                mListener.audioPrepared();
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -88,6 +98,7 @@ public class AudioManager {
     }
 
     public void cancelAudio(){
+        Log.e(TAG, "cancelAudio: ---" );
         releaseAudio();
         if (current_path != null){
             File dele_file = new File(current_path);
